@@ -188,8 +188,6 @@ unexpected happen, this exception will be thrown with an appropriate message. (@
 You can check the [UnitTests](ConsoleArgsTests/) for more examples on how to use the CommandSerializer.
 
 ## TODO
-* Create a .nuget.package
-* Add on Git
 * Support multiple aliases and actions for the same field? 
   * AllowMultiple? 
   * Don't want to have a multimap
