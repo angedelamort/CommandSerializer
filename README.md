@@ -77,6 +77,42 @@ Mandatory arguments to long options are mandatory for short options too.
 Write your car manual here
 ```
 
+
+### Example
+
+Here's another full example to show how simple it is to replicate standard command line tools:
+
+```csharp
+class Program
+{
+    public class CommandLineArgs
+    {
+        [Parameter(Action = "help", Alias = 'h', HelpText = "Show this help.")]
+        public bool ShowHelp { get; set; }
+
+        [Parameter(Action = "text", Alias = 't', HelpText = "Print this string")]
+        public string Text { get; set; }
+    }
+
+    static void Main(string[] args)
+    {
+        try
+        {
+            var result = CommandSerializer<CommandLineArgs>.Parse(args);
+
+            if (args.Length == 0 || result.ShowHelp)
+                Console.WriteLine(CommandSerializer<CommandLineArgs>.GetHelp(Console.WindowWidth));
+
+            Console.WriteLine(result.Text);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}
+```
+
 ## Documentation
 
 ### Attributes
