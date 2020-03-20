@@ -14,6 +14,7 @@
     <Description>C# command-line argument parsing deserialization from attributes.</Description>
     <Copyright>Copyright 2020 sauleil</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
+    <PackageId>angedelamort.CommandSerializer</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
