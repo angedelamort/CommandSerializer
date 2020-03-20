@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <Authors>Sauleil Menard-Lamarre</Authors>
     <Company>none</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -15,6 +15,7 @@
     <Copyright>Copyright 2020 sauleil</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageId>angedelamort.CommandSerializer</PackageId>
+    <PackageReleaseNotes>- Fixed issue with help not printing properly.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

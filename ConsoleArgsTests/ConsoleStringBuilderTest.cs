@@ -68,5 +68,22 @@ text on
             Assert.AreEqual(@"    Hello
     World!", builder.ToString());
         }
+
+        [Test]
+        public void TestWithSuperLongStringThatCannotWrap()
+        {
+            var builder = new ConsoleStringBuilder(8);
+            builder.Append("ThisIsTheSuperLongSentenceThatCannotBeSplitInMultiline.", 2);
+
+            Assert.AreEqual(@"ThisIsTh
+  eSuper
+  LongSe
+  ntence
+  ThatCa
+  nnotBe
+  SplitI
+  nMulti
+  line.", builder.ToString());
+        }
     }
 }

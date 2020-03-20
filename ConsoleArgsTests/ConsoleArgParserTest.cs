@@ -213,6 +213,7 @@ namespace ConsoleArgsTests
             TestContext.Out.WriteLine(helpText);
             System.Diagnostics.Debug.WriteLine(helpText);
             Assert.IsNotEmpty(helpText);
+            Assert.IsTrue(helpText.StartsWith("Usage"));
         }
 
         //

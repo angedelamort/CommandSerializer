@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace CommandSerializer.Utils
@@ -8,6 +7,8 @@ namespace CommandSerializer.Utils
     {
         private readonly List<string> lines = new List<string>();
         private string currentLine = "";
+        private bool isOverflowOnNewLineContainsChar;  // When we have an overflow, tells if there is an actual character or just the indentation spaces.
+        private bool isOverflowMode;
 
         public int LineWidth { get; }
 
@@ -19,15 +20,14 @@ namespace CommandSerializer.Utils
             TabIndentation = tabIndentation;
         }
 
-        public void AppendLine()
+        public void AppendLine(string text = null, int overflowIndentation = 0)
         {
-            lines.Add("");
-        }
-
-        public void AppendLine(string text, int overflowIndentation = 0)
-        {
-            Append(text);
+            if (!string.IsNullOrEmpty(text))
+                Append(text);
+            lines.Add(currentLine);
             currentLine = "";
+            isOverflowOnNewLineContainsChar = false;
+            isOverflowMode = false;
         }
 
         public void Append(string text, int overflowIndentation = 0)
@@ -47,32 +47,42 @@ namespace CommandSerializer.Utils
                     case '\n':
                         lines.Add(currentLine);
                         currentLine = new string(' ', overflowIndentation);
+                        isOverflowOnNewLineContainsChar = true;
+                        isOverflowMode = true;
                         break;
 
                     default:
-                        if (!(string.IsNullOrWhiteSpace(currentLine) && char.IsWhiteSpace(letter))) // NOTE: super slow - find an alternative.
+                        if (!isOverflowOnNewLineContainsChar || !char.IsWhiteSpace(letter))
+                        {
                             currentLine += letter;
+                            isOverflowOnNewLineContainsChar = false;
+                        }
                         break;
                 }
 
                 if (currentLine.Length > LineWidth)
                 {
-                    int i;
-                    for (i = currentLine.Length - 1; i >= 0; i--)
+                    var i = currentLine.Length - 1;
+                    var max = isOverflowMode ? overflowIndentation : 0;
+                    for (; i >= max; i--)
                     {
-                        if (currentLine[i] == ' ' && i <= currentLine.Length)
+                        if (char.IsWhiteSpace(currentLine[i]) && i <= currentLine.Length)
                         {
                             lines.Add(currentLine.Substring(0, i).TrimEnd());
                             currentLine = new string(' ', overflowIndentation) + currentLine.Substring(i).TrimStart();
+                            isOverflowOnNewLineContainsChar = true;
+                            isOverflowMode = true;
                             break;
                         }
                     }
 
                     // NOTE: Add it anyway - we did our best!
-                    if (i == 0)
+                    if (i == max - 1)
                     {
                         lines.Add(currentLine.Substring(0, LineWidth).TrimEnd());
                         currentLine = new string(' ', overflowIndentation) + currentLine.Substring(LineWidth);
+                        isOverflowOnNewLineContainsChar = false;
+                        isOverflowMode = true;
                     }
                 }
             }
